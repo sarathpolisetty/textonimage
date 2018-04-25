@@ -1,3 +1,10 @@
+/* Initially make sure that the gd-library is successfully added to the php ie by removing the comments line in the php.ini file.
+
+we can chect it by phpinfo() commamd.
+
+write <?php phpinfo() ?> check the output , which gives the information of whether gd-library is enabled or not.*/
+
+
 <html>
 <head><title>text on image</title>
 
@@ -28,19 +35,18 @@
 		$filepath= "uploadedimages/" . $_FILES["choose"]["name"];
 		if(move_uploaded_file($_FILES["choose"]["tmp_name"], $filepath))
 		{
-			header('Content-type: image/jpeg');	
-			$imagei = imagecreatefromjpeg($filepath);
+			
+			$image = imagecreatefromjpeg('$filepath');
 			$xpos=$_POST['xlocation'];
 			$ypos=$_POST['ylocation'];
 			$text=$_POST['txfield'];
 			$fontSize=3;
-			$font = 'arial.ttf';
 			$angle=0;
 			$color = imagecolorallocate($imagei, 0, 20, 50);
-			imagettftext($imagei, $fontSize,$angle,$xpos,$ypos, $color,$font, $text);
-			imagejpeg($imagei,null,100);
-      imagedestroy($imagei);
-			
+			imagestring($image, $fontSize, $xpos, $ypos,urldecode($text), $color);
+			header('Content-type: image/jpeg');	
+			imagejpeg($image,null,100);			
+
 		}
 		else
 		{
